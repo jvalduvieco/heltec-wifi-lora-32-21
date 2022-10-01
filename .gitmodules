@@ -1,0 +1,3 @@
+[submodule "components/esp-idf-ssd1306"]
+	path = components/esp-idf-ssd1306
+	url = git@github.com:jvalduvieco/esp-idf-ssd1306.git
