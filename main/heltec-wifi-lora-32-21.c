@@ -5,6 +5,7 @@
 #include <freertos/task.h>
 #include "ssd1306.h"
 #include "gui.h"
+#include "wifi.h"
 
 #define TAG "main"
 
@@ -18,8 +19,9 @@ _Noreturn void app_main(void) {
     i2c_master_init(&dev, CONFIG_SDA_GPIO, CONFIG_SCL_GPIO, CONFIG_RESET_GPIO);
     ESP_LOGI(TAG, "Panel is 128x64");
     ssd1306_init(&dev, 128, 64);
-
+    start_wifi();
     xTaskCreate(dummy_gui_task, "dymmy_gui", 2048, (void *) &dev, 1, NULL);
+
 
 #if 0
     // Fade Out
