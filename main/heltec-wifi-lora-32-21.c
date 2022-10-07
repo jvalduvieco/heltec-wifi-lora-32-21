@@ -19,8 +19,25 @@ _Noreturn void app_main(void) {
     i2c_master_init(&dev, CONFIG_SDA_GPIO, CONFIG_SCL_GPIO, CONFIG_RESET_GPIO);
     ESP_LOGI(TAG, "Panel is 128x64");
     ssd1306_init(&dev, 128, 64);
+    ssd1306_clear_screen(&dev, false);
+    ssd1306_contrast(&dev, 0xff);
+    bool provisioned = false;
+    wifi_init();
+    ESP_ERROR_CHECK (is_provisioned(&provisioned));
+    if (provisioned) {
+        print_text(&dev, 0, "Provisioned...");
+        start_wifi();
+    } else {
+        print_text(&dev, 1, "Not provisioned");
+        start_provisioning();
+    }
     start_wifi();
-    xTaskCreate(dummy_gui_task, "dymmy_gui", 2048, (void *) &dev, 1, NULL);
+    char ssid[32];
+    if (get_wifi_ssid(ssid, 32) == ESP_OK) {
+        print_text(&dev, 2, "Initialized...");
+        print_text(&dev, 3, ssid);
+    }
+    //xTaskCreate(dummy_gui_task, "dymmy_gui", 2048, (void *) &dev, 1, NULL);
 
 
 #if 0
